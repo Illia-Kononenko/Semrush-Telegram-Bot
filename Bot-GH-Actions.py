@@ -4,6 +4,7 @@ import pytz
 import os
 import json
 
+
 # Часовой пояс Киева
 kyiv_tz = pytz.timezone("Europe/Kyiv")
 
@@ -43,28 +44,28 @@ def job():
         # Дата для подписи
         current_date = datetime.now(kyiv_tz).strftime("%d.%m.%Y")
 
-        # Открываем изображения
-        with open("image1.png", "rb") as img1, open("image2.png", "rb") as img2:
-            media_payload = json.dumps([
-                {
-                    "type": "photo",
-                    "media": "attach://photo1",
-                    "caption": current_date
-                },
-                {
-                    "type": "photo",
-                    "media": "attach://photo2"
-                }
-            ])
+        # Отправляем в каждый чат
+        for chat_id in chat_ids:
+            with open("image1.png", "rb") as img1, open("image2.png", "rb") as img2:
+                media_payload = json.dumps([
+                    {
+                        "type": "photo",
+                        "media": "attach://photo1",
+                        "caption": current_date
+                    },
+                    {
+                        "type": "photo",
+                        "media": "attach://photo2"
+                    }
+                ])
 
-            # Отправляем в каждый чат
-            for chat_id in chat_ids:
                 url = f'https://api.telegram.org/bot{bot_token}/sendMediaGroup'
                 files = {
                     "media": (None, media_payload),
                     "photo1": img1,
                     "photo2": img2
                 }
+
                 response = requests.post(url, data={"chat_id": chat_id}, files=files)
 
                 if response.status_code == 200:

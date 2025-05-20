@@ -2,7 +2,7 @@ name: Telegram Bot
 
 on:
   schedule:
-    - cron: '0 7 * * 1-5'  # 10:00 по Киеву летом (UTC+3)
+    - cron: '0 10 * * 1-5'  # 13:00 по Киеву летом (UTC+3)
   workflow_dispatch:
 
 jobs:
